@@ -1,0 +1,28 @@
+name: بوت المراجحة المثلثية - Binance
+
+on:
+  schedule:
+    # يعمل كل 15 دقيقة (تعديل حسب الحاجة)
+    - cron: '*/15 * * * *'
+  workflow_dispatch:  # يسمح بالتشغيل اليدوي
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 استنساخ المستودع
+        uses: actions/checkout@v4
+
+      - name: 🐍 إعداد بايثون
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 📦 تثبيت المكتبات
+        run: pip install -r requirements.txt
+
+      - name: 🚀 تشغيل البوت (دورة واحدة)
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python arbitrage_bot.py
